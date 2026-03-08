@@ -22,6 +22,10 @@ unsafe_allow_html=True
 
 st.write("Enter the patient health parameters below to estimate PCOS risk.")
 
+# -----------------------------
+# INPUT SECTION
+# -----------------------------
+
 age = st.number_input("Age")
 bmi = st.number_input("BMI")
 
@@ -41,22 +45,24 @@ follicle_left = st.number_input("Follicle Count Left")
 follicle_right = st.number_input("Follicle Count Right")
 amh = st.number_input("AMH Level")
 
+# -----------------------------
+# PREDICTION
+# -----------------------------
+
 if st.button("Predict Risk"):
 
-    input_data = pd.DataFrame(
-    [[age, bmi, cycle, hair_growth, skin_darkening, weight_gain, follicle_left, follicle_right, amh]],
-    columns=[
-        "Age (yrs)",
-        "BMI",
-        "Cycle(R/I)",
-        "hair growth(Y/N)",
-        "Skin darkening (Y/N)",
-        "Weight gain(Y/N)",
-        "Follicle No. (L)",
-        "Follicle No. (R)",
-        "AMH(ng/mL)"
-    ]
-)
+    # Send values directly in correct order
+    input_data = [[
+        age,
+        bmi,
+        cycle,
+        hair_growth,
+        skin_darkening,
+        weight_gain,
+        follicle_left,
+        follicle_right,
+        amh
+    ]]
 
     prediction = model.predict(input_data)[0]
     probability = model.predict_proba(input_data)[0][1] * 100
@@ -67,12 +73,20 @@ if st.button("Predict Risk"):
     st.write("PCOS Detected:", prediction_label)
     st.write("Probability:", round(probability,2), "%")
 
+    # -----------------------------
+    # Risk Level
+    # -----------------------------
+
     if probability < 30:
         st.success("Risk Level: LOW")
     elif probability < 60:
         st.warning("Risk Level: MODERATE")
     else:
         st.error("Risk Level: HIGH")
+
+    # -----------------------------
+    # Gauge Meter
+    # -----------------------------
 
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
@@ -90,6 +104,10 @@ if st.button("Predict Risk"):
     ))
 
     st.plotly_chart(fig, use_container_width=True)
+
+    # -----------------------------
+    # Charts Side by Side
+    # -----------------------------
 
     col1, col2 = st.columns(2)
 
@@ -112,6 +130,25 @@ if st.button("Predict Risk"):
         ax2.set_title("Health Indicators")
 
         st.pyplot(fig2)
+
+    # -----------------------------
+    # Health Assessment
+    # -----------------------------
+
+    st.subheader("Health Assessment")
+
+    if bmi > 30:
+        st.warning("High BMI detected. Lifestyle modification recommended.")
+
+    if amh > 6:
+        st.warning("Elevated AMH level detected.")
+
+    if follicle_left > 12 or follicle_right > 12:
+        st.warning("High follicle count detected.")
+
+    # -----------------------------
+    # Health Tips
+    # -----------------------------
 
     st.subheader("PCOS Health Tips")
 
