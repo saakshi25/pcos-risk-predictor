@@ -1,2 +1,15 @@
-# pcos-risk-predictor
-An AI-powered PCOS risk prediction system developed using machine learning. The application analyzes patient health parameters to estimate PCOS risk and presents results through an interactive Streamlit dashboard with visualizations, risk indicators, and health recommendations.
+# AI-Powered PCOS Risk Detection System
+
+This project predicts the risk of Polycystic Ovary Syndrome (PCOS) using machine learning.
+
+Features:
+- PCOS risk prediction
+- Interactive visualization dashboard
+- Health assessment indicators
+- Random PCOS health tips
+
+Technologies Used:
+- Python
+- Streamlit
+- FastAPI
+- Scikit-learn
